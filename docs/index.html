@@ -56,7 +56,7 @@
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="client secret" aria-label="client secret" aria-describedby="basic-addon2">
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">Login</button>
+                <button id="loginButton" class="btn btn-outline-primary" type="button">Login</button>
             </div>
         </div>
     </div>
@@ -212,6 +212,11 @@
                 $('#loginForm').show(500);
             }
 
+            $('#loginButton').click(function(){
+                const id = window.crypto.randomUUID();
+                console.log(id);
+                $("#loginForm").hide();
+            });
 
 
 
