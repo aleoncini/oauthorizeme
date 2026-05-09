@@ -194,10 +194,9 @@
 
         $(document).ready(function () {
 
-            loadBanner('img/RHBannerNew.png');
-            checkConfig();
-
-            displayAllTrips();
+            const urlParams = new URLSearchParams(window.location.search);
+            const myParam = urlParams.get('action');
+            console.log(">>>>>>>>>>> " + myParam);
 
             $('#startOverButton').click(function(){
                 $("#confirmStartOverModal").modal('hide');
