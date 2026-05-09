@@ -51,6 +51,15 @@
         </div>
     </div>
 
+    <div class="container" id="loginForm" style="display:none">
+        <p class="text-end">It seems you are not logged in. In order to list your repos you must gain an Access Token. Insert the secret and press login button.</p>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="client secret" aria-label="client secret" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">Login</button>
+            </div>
+        </div>
+    </div>
 
     <div class="container" id="current_report" style="display:none">
         <div class="alert alert-danger" id="formNotComplete" role="alert" style="display:none;"></div>
@@ -197,6 +206,15 @@
             const urlParams = new URLSearchParams(window.location.search);
             const myParam = urlParams.get('action');
             console.log(">>>>>>>>>>> " + myParam);
+
+            var accessToken = localStorage.getItem('accessToken');
+            if(associateName == null){
+                $('#loginForm').show(500);
+            }
+
+
+
+
 
             $('#startOverButton').click(function(){
                 $("#confirmStartOverModal").modal('hide');

@@ -1,8 +1,4 @@
 var STORE_ORIGIN = window.location.origin;
-var banner = new Image();
-
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
 
 function setAlert(msg) {
     $("#formNotComplete").html(msg);
@@ -12,14 +8,9 @@ function setAlert(msg) {
     }, 3000);
 };
 
-function closeAssociateInfoAlert() {
-    $("#associateInfoFormNotCorrect").fadeOut();
-};
-
-function checkConfig() {
-    // check if associate name and other info are already saved on this browser
-    // in case they are not, will ask with a modal form.
-    var associateName = localStorage.getItem('associateName');
+function checkAccessToken() {
+    // check if an access token is already stored in the browser storage space
+    var accessToken = localStorage.getItem('accessToken');
     if(associateName == null){
         $("#enterAssociateInfoModal").modal('show');
     }
