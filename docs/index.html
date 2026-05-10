@@ -207,7 +207,6 @@
 
             const urlParams = new URLSearchParams(window.location.search);
             const myParam = urlParams.get('action');
-            console.log(">>>>>>>>>>> " + myParam);
 
             var accessToken = localStorage.getItem('accessToken');
             if(accessToken == null){
@@ -236,7 +235,7 @@
                 console.log(params.toString());
 
                 console.log(">>>>>>>>>>> " + AUTH_URL + params.toString());
-                //window.open(AUTH_URL);
+                window.open(AUTH_URL);
             });
 
             $('#startOverButton').click(function(){
