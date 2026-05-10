@@ -100,7 +100,9 @@
                 $('#clientSecretInput').val(client_secret);
             }
 
-            if(code !== null){
+            if(code == null){
+                $('#loginForm').show(500);
+            } else {
                 // check the challenge
                 if(urlParams.get('state') != generateHash(localStorage.getItem("state"))){
                     setAlert('Invalid STATE');
