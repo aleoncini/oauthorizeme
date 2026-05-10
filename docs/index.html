@@ -48,6 +48,8 @@
             <p class="lead">A very simple web app to work with OAuth2 framework</p>
             <p id="the_response"></p>
             <br><br>
+            <div class="alert alert-danger" id="formNotComplete" role="alert" style="display:none;"></div>
+            <br><br>
         </div>
     </div>
 
@@ -63,7 +65,6 @@
     </div>
 
     <div class="container" id="current_report" style="display:none">
-        <div class="alert alert-danger" id="formNotComplete" role="alert" style="display:none;"></div>
         <br>
         <p class="text-end">This is your latest report. You can <button type="button" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#confirmStartOverModal">Start Over</button> or you can download it as a <button id="pdfButton" type="button" class="btn btn-outline-secondary btn-sm"  onclick="javascript:saveAsPdf();">PDF</button></p>
         <table class="table table-condensed table-hover" id="tbl_trips">
@@ -214,15 +215,29 @@
             }
 
             $('#loginButton').click(function(){
-                const state = window.crypto.randomUUID();
+
+                if ($('#clientIdInput').val().length == 0) {
+                    setAlert('Please insert a valid CLIENT_ID');
+                    return;
+                }
+                trip.from = $('#fromLocationInput').val();
+
                 $("#loginForm").hide(500);
-                var params = {};
-                params.response_type = "code";
-                params.state = state;
-                params.redirect_uri = window.location.origin + window.location.pathname;
-                params.scope = 'user public_repo';
-                console.log(">>>>>>>>>>> " + stringify(params));
-                window.open(AUTH_URL);
+
+                const state = window.crypto.randomUUID();
+                localStorage.setItem('state', state);
+
+                const params = new URLSearchParams();
+                params.set("state", state);
+                params.set("response_type", "code");
+                params.set("redirect_uri", window.location.origin + window.location.pathname);
+                params.set("scope", "user public_repo");
+                params.set("client_id", $('#fromLocationInput').val());
+
+                console.log(params.toString());
+
+                console.log(">>>>>>>>>>> " + AUTH_URL + params.toString());
+                //window.open(AUTH_URL);
             });
 
             $('#startOverButton').click(function(){
