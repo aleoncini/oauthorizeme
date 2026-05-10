@@ -220,7 +220,6 @@
                     setAlert('Please insert a valid CLIENT_ID');
                     return;
                 }
-                trip.from = $('#fromLocationInput').val();
 
                 $("#loginForm").hide(500);
 
@@ -232,7 +231,7 @@
                 params.set("response_type", "code");
                 params.set("redirect_uri", window.location.origin + window.location.pathname);
                 params.set("scope", "user public_repo");
-                params.set("client_id", $('#fromLocationInput').val());
+                params.set("client_id", $('#clientIdInput').val());
 
                 console.log(params.toString());
 
