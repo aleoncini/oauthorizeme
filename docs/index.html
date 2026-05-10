@@ -246,10 +246,8 @@
                 params.set("scope", "user public_repo");
                 params.set("client_id", $('#clientIdInput').val());
 
-                console.log(params.toString());
-
-                console.log(">>>>>>>>>>> " + AUTH_URL + params.toString());
-                //window.open(AUTH_URL);
+                console.log("go to login: " + AUTH_URL + '?' + params.toString());
+                window.open(AUTH_URL + '?' + params.toString());
             });
 
             $('#startOverButton').click(function(){
