@@ -64,19 +64,9 @@
         </div>
     </div>
 
-    <div class="container" id="current_report" style="display:none">
-        <br>
-        <p class="text-end">This is your latest report. You can <button type="button" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#confirmStartOverModal">Start Over</button> or you can download it as a <button id="pdfButton" type="button" class="btn btn-outline-secondary btn-sm"  onclick="javascript:saveAsPdf();">PDF</button></p>
-        <table class="table table-condensed table-hover" id="tbl_trips">
-            <thead>
-                <tr class="tb_header"><th>Date</th><th>Odometer start (km)</th><th>From – location (City/Country)</th><th>To – location [City/Country}</th><th>2 Way</th><th>Purpose and/or customer</th><th>Odometer End (km)</th><th>Mileage (km)</th><th>&nbsp;</th></tr>
-            </thead>
-            <tbody id="tripsTableBody">
-            </tbody>
-        </table>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tripForm">
-            Add Trip
-        </button>
+    <div class="container" id="token" style="display:none">
+        <p class="text-end">It seems you are succesfully logged in. Now this token can be used to obtain an ACCESS Token and display a list of your repos.</p>
+        <button id="listButton" type="button" class="btn btn-primary">Get list of repos</button>
     </div>
 
 </main>
@@ -85,113 +75,6 @@
     <hr>
     <p>&copy; Red Hat Italy 2026-2028</p>
 </footer>
-
-<!-- Modal form to collect data about a single Trip -->
-<div class="modal fade" id="tripForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">Add Trip to Report</h5>
-            </div>
-
-            <div class="modal-body">
-                <p>The odometer start is calculated starting from the latest odometer end, anyway you can overwrite it.</p>
-                <div class="mb-3">
-                    <label for="dateInput" class="form-label">Date of the Trip</label>
-                    <input type="date" class="form-control" id="dateInput" onfocusout="setOdometerStart()">
-                </div>
-                <div class="mb-3">
-                    <label for="fromLocationInput" class="form-label">From – location (City or Country)</label>
-                    <input type="text" class="form-control" id="fromLocationInput">
-                </div>
-                <div class="mb-3">
-                    <label for="toLocationInput" class="form-label">To – location (City or Country)</label>
-                    <input type="text" class="form-control" id="toLocationInput">
-                </div>
-                <div class="mb-3">
-                    <label for="purposeInput" class="form-label">Purpose and/or customer</label>
-                    <input type="text" class="form-control" id="purposeInput">
-                </div>
-                <div class="mb-3">
-                    <label for="odoStartInput" class="form-label">Odometer start (km)</label>
-                    <input type="text" class="form-control" id="odoStartInput">
-                </div>
-                <div class="mb-3">
-                    <label for="distanceInput" class="form-label">Single Trip distance (km)</label>
-                    <input type="text" class="form-control" id="distanceInput">
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="twoWayCheck" checked>
-                    <label class="form-check-label" for="twoWayCheck">
-                        Two ways trip
-                    </label>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button id="saveTripButton" type="button" class="btn btn-outline-primary">Save</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- Modal form to confirm the reset of all trips a start a new report -->
-<div id="confirmStartOverModal" class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Start a NEW Report</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>WARNING!</p>
-                <p>If you start a new Report all the trips currently saved will be lost.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button id="startOverButton" type="button" class="btn btn-primary">Start New Report</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal form to enter configuration. This form is called once if config is not found for this browser -->
-<div class="modal fade" id="enterAssociateInfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Associate Info</h5>
-            </div>
-            <div class="modal-body">
-                <p>The application has detected this is the first time you access using this browser.</p>
-                <p>To complete the Report some information is required about you. This data, and data of the trips,  will persist into your browser and nothing
-                    will be saved outside of it. If you change browser or server implementation you will be asked again.
-                </p>
-                <div class="mb-3">
-                    <label for="associateNameInput" class="form-label">Associate full name</label>
-                    <input type="text" class="form-control" id="associateNameInput" onfocus="closeAssociateInfoAlert()">
-                </div>
-                <div class="mb-3">
-                    <label for="vehicleTypeInput" class="form-label">Vehicle Type</label>
-                    <input type="text" class="form-control" id="vehicleTypeInput" onfocus="closeAssociateInfoAlert()">
-                </div>
-                <div class="mb-3">
-                    <label for="mileageRateInput" class="form-label">Mileage Rate</label>
-                    <input type="text" class="form-control" id="mileageRateInput" placeholder="#.####" onfocus="closeAssociateInfoAlert()">
-                </div>
-                <div class="alert alert-warning" id="associateInfoFormNotCorrect" role="alert" style="display:none;"></div>
-            </div>
-            <div class="modal-footer">
-                <button id="saveAssociateInfoButton" type="button" class="btn btn-primary">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 
 <!-- JavaScript libraries-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -206,7 +89,8 @@
         $(document).ready(function () {
 
             const urlParams = new URLSearchParams(window.location.search);
-            const myParam = urlParams.get('action');
+            const code = urlParams.get('code');
+
             const client_id = localStorage.getItem("clientId");
             if(client_id !== null){
                 $('#clientIdInput').val(client_id);
@@ -216,9 +100,14 @@
                 $('#clientSecretInput').val(client_secret);
             }
 
-            var accessToken = localStorage.getItem('accessToken');
-            if(accessToken == null){
-                $('#loginForm').show(500);
+            if(code !== null){
+                // check the challenge
+                if(urlParams.get('state') != generateHash(localStorage.getItem("state"))){
+                    setAlert('Invalid STATE');
+                    return;
+                }
+                $('#tokenText').html(code);
+                $('#token').show(500);
             }
 
             $('#loginButton').click(function(){
@@ -232,7 +121,7 @@
                     return;
                 }
                 localStorage.setItem('clientId', $('#clientIdInput').val());
-                localStorage.setItem('secretId', $('#clientSecretInput').val());
+                localStorage.setItem('clientSecret', $('#clientSecretInput').val());
 
                 $("#loginForm").hide(500);
 
@@ -247,104 +136,11 @@
                 params.set("client_id", $('#clientIdInput').val());
 
                 console.log("go to login: " + AUTH_URL + '?' + params.toString());
-                window.open(AUTH_URL + '?' + params.toString());
+                window.open(AUTH_URL + '?' + params.toString(), "_self");
             });
 
-            $('#startOverButton').click(function(){
-                $("#confirmStartOverModal").modal('hide');
-                resetReport();
-            });
-
-            $('#saveTripButton').click(function(){
-                $("#tripForm").modal('hide');
-                var trip = {};
-
-                if ($('#dateInput').val().length == 0) {
-                    setAlert('Please insert a valid Date for Trip');
-                    return;
-                }
-                trip.date = new Date($('#dateInput').val());
-                //trip.date = t_date.toLocaleDateString('it-IT', options);
-
-                if ($('#fromLocationInput').val().length == 0) {
-                    setAlert('Please insert a location where the trip started from');
-                    return;
-                }
-                trip.from = $('#fromLocationInput').val();
-
-                if ($('#toLocationInput').val().length == 0) {
-                    setAlert('Please insert a location of destination');
-                    return;
-                }
-                trip.destination = $('#toLocationInput').val();
-
-                if ($('#purposeInput').val().length == 0) {
-                    setAlert('Please insert customer name or purpose of the visit');
-                    return;
-                }
-                trip.purpose = $('#purposeInput').val();
-
-                if (($('#odoStartInput').val().length == 0) || (isNaN($('#odoStartInput').val()))) {
-                    setAlert('Please insert a numeric value in the Odometer Start Field');
-                    return;
-                }
-                trip.odometerStart = parseInt($('#odoStartInput').val());
-
-                if (($('#distanceInput').val().length == 0) || (isNaN($('#distanceInput').val()))) {
-                    setAlert('Please insert a numeric value in the Distance Field');
-                    return;
-                }
-                trip.distance = parseInt($('#distanceInput').val());
-
-                trip.twoWays = $('#twoWayCheck').is(":checked");
-                
-                if(trip.twoWays){
-                    trip.distance = trip.distance * 2;
-                }
-                trip.odometerEnd = (trip.odometerStart + trip.distance);
-
-                var trips = JSON.parse(localStorage.getItem("mrtTrips") || "[]");
-                addTripToTable(trip, trips.length);
-                trips.push(trip);
-                localStorage.setItem('mrtTrips', JSON.stringify(trips));
-                localStorage.setItem('latestOdometer', trip.odometerEnd);
-            });
-
-            $('#saveAssociateInfoButton').click(function(){
-                if ($('#associateNameInput').val().length == 0) {
-                    $("#associateInfoFormNotCorrect").html('Please insert a valid Associate full name');
-                    $("#associateInfoFormNotCorrect").fadeIn();
-                    return;
-                }
-                if ($('#vehicleTypeInput').val().length == 0) {
-                    $("#associateInfoFormNotCorrect").html('Please insert a valid vehicle type');
-                    $("#associateInfoFormNotCorrect").fadeIn();
-                    return;
-                }
-                if (($('#mileageRateInput').val().length == 0) || (isNaN($('#mileageRateInput').val()))) {
-                    $("#associateInfoFormNotCorrect").html('Please insert a numeric value in the Rate Field');
-                    $("#associateInfoFormNotCorrect").fadeIn();
-                    return;
-                }
-                var rate = $('#mileageRateInput').val().trim().replace(",", ".");
-                var regEx = /^\d{1}\.\d{4}$/;
-                if(! rate.match(regEx)){
-                    $("#associateInfoFormNotCorrect").html('Please use the format <b>#.####</b> for the Rate Field');
-                    $("#associateInfoFormNotCorrect").fadeIn();
-                    return;
-                }
-                localStorage.setItem('associateName', $('#associateNameInput').val());
-                localStorage.setItem('vehicleType', $('#vehicleTypeInput').val());
-                localStorage.setItem('mileageRate', rate);
-                localStorage.setItem('latestMileage', 0);
-                $("#enterAssociateInfoModal").modal('hide');
-            });
-
-            $(document).on("click", ".delete_trip", function () {
-                var trips = JSON.parse(localStorage.getItem("mrtTrips"));
-                trips.splice(this.dataset.id, 1);
-                localStorage.setItem('mrtTrips', JSON.stringify(trips));
-                $(this).parent().remove();
+            $('#listButton').click(function(){
+                console.log(">>>>>>>>>>>>>>>>>>>> going to get repos");
             });
 
         });
