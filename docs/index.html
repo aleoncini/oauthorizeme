@@ -240,7 +240,7 @@
                 localStorage.setItem('state', state);
 
                 const params = new URLSearchParams();
-                params.set("state", state);
+                params.set("state", generateHash(state));
                 params.set("response_type", "code");
                 params.set("redirect_uri", window.location.origin + window.location.pathname);
                 params.set("scope", "user public_repo");
@@ -249,7 +249,7 @@
                 console.log(params.toString());
 
                 console.log(">>>>>>>>>>> " + AUTH_URL + params.toString());
-                window.open(AUTH_URL);
+                //window.open(AUTH_URL);
             });
 
             $('#startOverButton').click(function(){
