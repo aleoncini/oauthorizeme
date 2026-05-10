@@ -207,6 +207,14 @@
 
             const urlParams = new URLSearchParams(window.location.search);
             const myParam = urlParams.get('action');
+            const client_id = localStorage.getItem("clientId");
+            if(client_id !== null){
+                $('#clientIdInput').val(client_id);
+            }
+            const client_secret = localStorage.getItem("clientSecret");
+            if(client_secret !== null){
+                $('#clientSecretInput').val(client_secret);
+            }
 
             var accessToken = localStorage.getItem('accessToken');
             if(accessToken == null){
@@ -216,9 +224,15 @@
             $('#loginButton').click(function(){
 
                 if ($('#clientIdInput').val().length == 0) {
-                    setAlert('Please insert a valid CLIENT_ID');
+                    setAlert('Please insert a valid CLIENT ID');
                     return;
                 }
+                if ($('#clientSecretInput').val().length == 0) {
+                    setAlert('Please insert a valid SECRET ID');
+                    return;
+                }
+                localStorage.setItem('clientId', $('#clientIdInput').val());
+                localStorage.setItem('secretId', $('#clientSecretInput').val());
 
                 $("#loginForm").hide(500);
 
