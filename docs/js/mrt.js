@@ -1,4 +1,5 @@
 var STORE_ORIGIN = window.location.origin;
+const AUTH_URL = 'https://github.com/login/oauth/authorize';
 
 function setAlert(msg) {
     $("#formNotComplete").html(msg);
@@ -6,14 +7,6 @@ function setAlert(msg) {
     window.setTimeout(function() {
         $("#formNotComplete").fadeOut();
     }, 3000);
-};
-
-function checkAccessToken() {
-    // check if an access token is already stored in the browser storage space
-    var accessToken = localStorage.getItem('accessToken');
-    if(associateName == null){
-        $("#enterAssociateInfoModal").modal('show');
-    }
 };
 
 function resetReport() {

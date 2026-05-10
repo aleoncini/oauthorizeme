@@ -54,7 +54,8 @@
     <div class="container" id="loginForm" style="display:none">
         <p class="text-end">It seems you are not logged in. In order to list your repos you must gain an Access Token. Insert the secret and press login button.</p>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="client secret" aria-label="client secret" aria-describedby="basic-addon2">
+            <input id="clientIdInput" type="text" class="form-control" placeholder="client ID" aria-label="client ID" aria-describedby="basic-addon2">
+            <input id="clientSecretInput" type="text" class="form-control" placeholder="client secret" aria-label="client secret" aria-describedby="basic-addon2">
             <div class="input-group-append">
                 <button id="loginButton" class="btn btn-outline-primary" type="button">Login</button>
             </div>
@@ -213,13 +214,16 @@
             }
 
             $('#loginButton').click(function(){
-                const id = window.crypto.randomUUID();
-                console.log(id);
-                $("#loginForm").hide();
+                const state = window.crypto.randomUUID();
+                $("#loginForm").hide(500);
+                var params = {};
+                params.response_type = "code";
+                params.state = state;
+                params.redirect_uri = window.location.origin + window.location.pathname;
+                params.scope = 'user public_repo';
+                console.log(">>>>>>>>>>> " + stringify(params));
+                window.open(AUTH_URL);
             });
-
-
-
 
             $('#startOverButton').click(function(){
                 $("#confirmStartOverModal").modal('hide');
