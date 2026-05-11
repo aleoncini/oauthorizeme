@@ -18,6 +18,10 @@ const generateHash = (string) => {
   return hash;
 };
 
+function queryParamToBool(value) {
+  return ((value+'').toLowerCase() === 'true')
+}
+
 function resetReport() {
     var trips = [];
     localStorage.setItem('mrtTrips', JSON.stringify(trips));

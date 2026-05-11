@@ -54,10 +54,9 @@
     </div>
 
     <div class="container" id="loginForm" style="display:none">
-        <p class="text-end">It seems you are not logged in. In order to list your repos you must gain an Access Token. Insert the secret and press login button.</p>
+        <p class="text-end">In order to list your repos you must gain an Access Token. Insert the secret and press login button.</p>
         <div class="input-group mb-3">
             <input id="clientIdInput" type="text" class="form-control" placeholder="client ID" aria-label="client ID" aria-describedby="basic-addon2">
-            <input id="clientSecretInput" type="text" class="form-control" placeholder="client secret" aria-label="client secret" aria-describedby="basic-addon2">
             <div class="input-group-append">
                 <button id="loginButton" class="btn btn-outline-primary" type="button">Login</button>
             </div>
@@ -65,9 +64,13 @@
     </div>
 
     <div class="container" id="token" style="display:none">
-        <p>It seems you are succesfully logged in. Now this token can be used to obtain an ACCESS Token and display a list of your repos.</p>
-        <p id="tokenText"></p>
-        <button id="listButton" type="button" class="btn btn-primary">Get list of repos</button>
+        <p>AUTHORIZATION TOKEN:</p>
+        <p style="color: firebrick; font-size: 2em; font-weight: bold; font-family: Lucida Console, Courier New, monospace;" id="tokenText"></p>
+        <p>You received a token, probably after a succesful log in. Now this token can be used to obtain an ACCESS Token and display a list of your repos.</p>
+        <p>The request requires a client secret to be specified. Copy and paste the secret and press the <i>"List of repos"</i> button</p>
+        <input id="clientSecretInput" type="text" class="form-control" placeholder="client secret" aria-label="client secret" aria-describedby="basic-addon2">
+        <br>
+        <button id="listButton" type="button" class="btn btn-primary">List of repos</button>
     </div>
 
 </main>
@@ -104,11 +107,18 @@
             if(code == null){
                 $('#loginForm').show(500);
             } else {
-                // check the challenge
-                if(urlParams.get('state') != generateHash(localStorage.getItem("state"))){
-                    setAlert('Invalid STATE');
-                    return;
-                }
+                var checkState = true;
+                const queryCheckState = urlParams.get('checkState');
+                if(queryCheckState != null && queryCheckState.toLowerCase() == "false"){
+                    checkState = false;
+                } 
+                if(checkState){
+                    // check the challenge
+                    if(urlParams.get('state') != generateHash()){
+                        setAlert('Invalid STATE');
+                        return;
+                    }
+                } 
                 $('#tokenText').html(code);
                 $('#token').show(500);
             }
