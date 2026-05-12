@@ -103,10 +103,9 @@
 
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
-            const accessToken = urlParams.get('accessToken');
 
-            if(code != null){
-                console.log('!!!!!!=================> ' + accessToken);
+            if(urlParams.has('accessToken')){
+                console.log('!!!!!!=================> ' + urlParams.get('accessToken'));
             }
 
             const client_id = localStorage.getItem("clientId");
@@ -177,9 +176,9 @@
                 params.set("redirect_uri", BASE_URL);
 
                 console.log("xchange: " + TOKEN_URL + '?' + params.toString());
-                window.open(TOKEN_URL + '?' + params.toString(), "_self");
+                //window.open(TOKEN_URL + '?' + params.toString(), "_self");
 
-                //getAccessToken($('#clientSecretInput').val(), window.location.origin + window.location.pathname, displayAccessToken);
+                getAccessToken($('#clientSecretInput').val(), BASE_URL, displayAccessToken);
             });
 
         });

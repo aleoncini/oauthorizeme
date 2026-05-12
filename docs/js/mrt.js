@@ -38,11 +38,11 @@ function getAccessToken(client_secret, baseurl, callbackFunction) {
     console.log('>>>>>>>>>>>>>>>>>> ' + the_url);
     $.ajax({
         url: the_url,
-        type: 'GET',
+        type: 'POST',
         beforeSend: function(req) {
             req.setRequestHeader('Access-Control-Allow-Origin', 'https://aleoncini.github.io');
-            req.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-            req.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
+            req.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+            req.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
         },
         complete: function(response, status){
             console.log("Answer from GITHUB: " + response.responseText);
