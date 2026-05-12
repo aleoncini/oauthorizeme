@@ -54,7 +54,9 @@
     </div>
 
     <div class="container" id="loginForm" style="display:none">
-        <p class="text-end">In order to list your repos you must gain an Access Token. Insert the secret and press login button.</p>
+        <p>To test the OAuth framework, specifically the Authorization Code Grant with PKCE, we will try to access the list of the repos of your GITHUB account.</p>
+        <p>To do it this application will redirect you to the authorization page of github and will require an AUTHORIZATION CODE for a specific client (that I have named <i>oauthorizeme</i>).</p>
+        <p class="text-end">In order to obtain the code insert the CLIENT ID and press login button.</p>
         <div class="input-group mb-3">
             <input id="clientIdInput" type="text" class="form-control" placeholder="client ID" aria-label="client ID" aria-describedby="basic-addon2">
             <div class="input-group-append">
