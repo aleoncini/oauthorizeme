@@ -116,7 +116,7 @@
                 } 
                 if(checkState){
                     // check the challenge
-                    if(urlParams.get('state') != generateHash(queryCheckState)){
+                    if(urlParams.get('state') != localStorage.getItem('state')){
                         setAlert('Invalid STATE');
                         return;
                     }
@@ -140,7 +140,7 @@
                 localStorage.setItem('state', state);
 
                 const params = new URLSearchParams();
-                params.set("state", generateHash(state));
+                params.set("state", state);
                 params.set("response_type", "code");
                 params.set("redirect_uri", window.location.origin + window.location.pathname);
                 params.set("scope", "user public_repo");
