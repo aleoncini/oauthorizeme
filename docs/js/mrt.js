@@ -39,8 +39,12 @@ function getAccessToken(client_secret, baseurl, callbackFunction) {
     $.ajax({
         url: the_url,
         type: 'GET',
+        beforeSend: function(req) {
+            req.header('Access-Control-Allow-Origin', 'https://aleoncini.github.io');
+            req.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+            req.header('Access-Control-Allow-Headers', 'Content-Type');
+        },
         complete: function(response, status){
-
             console.log("Answer from GITHUB: " + response.responseText);
             callbackFunction(response.responseText);        
         }
