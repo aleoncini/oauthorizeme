@@ -1,6 +1,7 @@
 var STORE_ORIGIN = window.location.origin;
 const AUTH_URL = 'https://github.com/login/oauth/authorize';
-const TOKEN_URL = 'https://github.com/login/oauth/access_token'
+const TOKEN_URL = 'https://github.com/login/oauth/access_token';
+const API_URL = 'https://api.github.com/';
 
 function setAlert(msg) {
     $("#formNotComplete").html(msg);
@@ -23,12 +24,23 @@ function queryParamToBool(value) {
   return ((value+'').toLowerCase() === 'true')
 }
 
-function loadRepos(callbackFunction) {
+function getAccessToken(client_secret, callbackFunction) {
+}
+
+function loadRepos(client_secret, callbackFunction) {
     $.ajax({
         url: TOKEN_URL,
         type: 'GET',
         dataType: 'json',
         beforeSend: function(req) {
+            req.setRequestHeader('Accept', 'application/vnd.github.v3+json, application/json');
+            req.setRequestHeader('User-Agent', 'https://example-app.com/');
+            req.setRequestHeader('Authorization', 'Bearer ' + client_secret);
+
+
+            'Accept: application/vnd.github.v3+json, application/json',
+      'User-Agent: https://example-app.com/'
+
             req.setRequestHeader('Authorization', 'Bearer ' + keycloak.token);
         },
         complete: function(response, status){
