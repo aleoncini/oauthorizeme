@@ -2,6 +2,7 @@ var STORE_ORIGIN = window.location.origin;
 const AUTH_URL = 'https://github.com/login/oauth/authorize';
 const TOKEN_URL = 'https://github.com/login/oauth/access_token';
 const API_URL = 'https://api.github.com/';
+const BASE_URL = 'https://aleoncini.github.io/oauthorizeme/index.html';
 
 function setAlert(msg) {
     $("#formNotComplete").html(msg);
@@ -32,8 +33,9 @@ function getAccessToken(client_secret, baseurl, callbackFunction) {
     var the_url = TOKEN_URL + "?grant_type=authorization_code";
     the_url += "&client_id=" + localStorage.getItem('clientId');
     the_url += "&client_secret=" + client_secret;
-    the_url += "&redirect_uri=" + encodeURI(baseurl);
+    the_url += "&redirect_uri=" + BASE_URL;
     the_url += "&code=" + localStorage.getItem('code');
+    console.log('>>>>>>>>>>>>>>>>>> ' + the_url);
     $.ajax({
         url: the_url,
         type: 'GET',
