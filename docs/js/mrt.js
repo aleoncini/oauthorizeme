@@ -29,7 +29,7 @@ function displayAccessToken() {
 }
 
 function getAccessToken(client_secret, baseurl, callbackFunction) {
-    const the_url = TOKEN_URL + "?grant_type=authorization_code";
+    var the_url = TOKEN_URL + "?grant_type=authorization_code";
     the_url += "&client_id=" + localStorage.getItem('clientId');
     the_url += "&client_secret=" + client_secret;
     the_url += "&redirect_uri=" + encodeURI(baseurl);
