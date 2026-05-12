@@ -173,12 +173,12 @@
                 params.set("client_id", localStorage.getItem('clientId'));
                 params.set("client_secret", $('#clientSecretInput').val());
                 params.set("code", localStorage.getItem('code'));
-                params.set("redirect_uri", BASE_URL);
+                params.set("redirect_uri", window.location.origin + window.location.pathname);
 
                 console.log("xchange: " + TOKEN_URL + '?' + params.toString());
-                //window.open(TOKEN_URL + '?' + params.toString(), "_self");
+                window.open(TOKEN_URL + '?' + params.toString(), "_self");
 
-                getAccessToken($('#clientSecretInput').val(), BASE_URL, displayAccessToken);
+                //getAccessToken($('#clientSecretInput').val(), BASE_URL, displayAccessToken);
             });
 
         });
