@@ -173,7 +173,7 @@
                 params.set("client_id", localStorage.getItem('clientId'));
                 params.set("client_secret", $('#clientSecretInput').val());
                 params.set("code", localStorage.getItem('code'));
-                params.set("redirect_uri", window.location.origin + window.location.pathname);
+                params.set("redirect_uri", "https://aleoncini.github.io/oauthorizeme/repos.html");
 
                 console.log("xchange: " + TOKEN_URL + '?' + params.toString());
                 window.open(TOKEN_URL + '?' + params.toString(), "_self");
