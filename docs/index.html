@@ -75,6 +75,13 @@
         <button id="accessTokenButton" type="button" class="btn btn-primary">Access Token</button>
     </div>
 
+    <div class="container" id="accessCode" style="display:none">
+        <p>ACCESS CODE:</p>
+        <p style="color: firebrick; font-size: 2em; font-weight: bold; font-family: Lucida Console, Courier New, monospace;" id="accessCodeText"></p>
+        <br>
+        <button id="reposButton" type="button" class="btn btn-primary">Repos</button>
+    </div>
+
 </main>
 
 <footer class="container">
@@ -156,16 +163,7 @@
                     return;
                 }
                 $("#authorizationCode").hide(500);
-                localStorage.setItem('clientSecret', $('#clientSecretInput').val());
-                const params = new URLSearchParams();
-                params.set("grant_type", 'authorization_code');
-                params.set("client_id",localStorage.getItem('clientId'));
-                params.set("client_secret",$('#clientSecretInput').val());
-                params.set("redirect_uri", window.location.origin + window.location.pathname);
-                params.set("code", localStorage.getItem('code'));
-
-                console.log("exchanging the code with access token: " + TOKEN_URL + '?' + params.toString());
-                window.open(TOKEN_URL + '?' + params.toString(), "_self");
+                getAccessToken($('#clientSecretInput').val(), window.location.origin + window.location.pathname, displayAccessToken);
             });
 
         });

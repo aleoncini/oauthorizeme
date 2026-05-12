@@ -22,9 +22,27 @@ const generateHash = (string) => {
 
 function queryParamToBool(value) {
   return ((value+'').toLowerCase() === 'true')
+};
+
+function displayAccessToken() {
+    $('#accessCode').show(500);
 }
 
-function getAccessToken(client_secret, callbackFunction) {
+function getAccessToken(client_secret, baseurl, callbackFunction) {
+    const the_url = TOKEN_URL + "?grant_type=authorization_code";
+    the_url += "&client_id=" + localStorage.getItem('clientId');
+    the_url += "&client_secret=" + client_secret;
+    the_url += "&redirect_uri=" + encodeURI(baseurl);
+    the_url += "&code=" + localStorage.getItem('code');
+    $.ajax({
+        url: the_url,
+        type: 'GET',
+        complete: function(response, status){
+
+            console.log("Answer from GITHUB: " + response.responseText);
+            callbackFunction(response.responseText);        
+        }
+    });
 }
 
 function loadRepos(client_secret, callbackFunction) {
