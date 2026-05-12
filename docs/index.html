@@ -131,10 +131,6 @@
                     setAlert('Please insert a valid CLIENT ID');
                     return;
                 }
-                if ($('#clientSecretInput').val().length == 0) {
-                    setAlert('Please insert a valid SECRET ID');
-                    return;
-                }
                 localStorage.setItem('clientId', $('#clientIdInput').val());
                 localStorage.setItem('clientSecret', $('#clientSecretInput').val());
 
@@ -156,6 +152,10 @@
 
             $('#accessTokenButton').click(function(){
                 console.log(">>>>>>>>>>>>>>>>>>>> going to get repos");
+                if ($('#clientSecretInput').val().length == 0) {
+                    setAlert('Please insert a valid SECRET ID');
+                    return;
+                }
             });
 
         });
