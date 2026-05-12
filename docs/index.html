@@ -63,14 +63,14 @@
         </div>
     </div>
 
-    <div class="container" id="token" style="display:none">
-        <p>AUTHORIZATION TOKEN:</p>
-        <p style="color: firebrick; font-size: 2em; font-weight: bold; font-family: Lucida Console, Courier New, monospace;" id="tokenText"></p>
-        <p>You received a token, probably after a succesful log in. Now this token can be used to obtain an ACCESS Token and display a list of your repos.</p>
-        <p>The request requires a client secret to be specified. Copy and paste the secret and press the <i>"List of repos"</i> button</p>
+    <div class="container" id="authorizationCode" style="display:none">
+        <p>AUTHORIZATION CODE:</p>
+        <p style="color: firebrick; font-size: 2em; font-weight: bold; font-family: Lucida Console, Courier New, monospace;" id="authorizationCodeText"></p>
+        <p>Very well, You have received an authorization code, probably after a succesful log in. This code can now be exchanged to obtain an ACCESS Token to operate with GITHUB APIs and display a list of your repos.</p>
+        <p>The operation requires a client secret to be specified. Copy and paste the secret and press the <i>"Access Token"</i> button</p>
         <input id="clientSecretInput" type="text" class="form-control" placeholder="client secret" aria-label="client secret" aria-describedby="basic-addon2">
         <br>
-        <button id="listButton" type="button" class="btn btn-primary">List of repos</button>
+        <button id="accessTokenButton" type="button" class="btn btn-primary">Access Token</button>
     </div>
 
 </main>
@@ -114,13 +114,13 @@
                 } 
                 if(checkState){
                     // check the challenge
-                    if(urlParams.get('state') != generateHash()){
+                    if(urlParams.get('state') != generateHash(queryCheckState)){
                         setAlert('Invalid STATE');
                         return;
                     }
                 } 
-                $('#tokenText').html(code);
-                $('#token').show(500);
+                $('#authorizationCodeText').html(code);
+                $('#authorizationCode').show(500);
             }
 
             $('#loginButton').click(function(){
@@ -152,7 +152,7 @@
                 window.open(AUTH_URL + '?' + params.toString(), "_self");
             });
 
-            $('#listButton').click(function(){
+            $('#accessTokenButton').click(function(){
                 console.log(">>>>>>>>>>>>>>>>>>>> going to get repos");
             });
 
