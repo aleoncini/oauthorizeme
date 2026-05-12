@@ -33,14 +33,14 @@ function getAccessToken(client_secret, baseurl, callbackFunction) {
     var the_url = TOKEN_URL + "?grant_type=authorization_code";
     the_url += "&client_id=" + localStorage.getItem('clientId');
     the_url += "&client_secret=" + client_secret;
-    the_url += "&redirect_uri=" + encodeURI(BASE_URL);
+    the_url += "&redirect_uri=" + encodeURI("https://aleoncini.github.io/oauthorizeme/repos.html");
     the_url += "&code=" + localStorage.getItem('code');
     console.log('>>>>>>>>>>>>>>>>>> ' + the_url);
     $.ajax({
         url: the_url,
         type: 'POST',
         beforeSend: function(req) {
-            req.setRequestHeader('Access-Control-Allow-Origin', 'https://aleoncini.github.io');
+            req.setRequestHeader('Access-Control-Allow-Origin', '*');
             req.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
             req.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
         },
