@@ -33,7 +33,7 @@ function getAccessToken(client_secret, baseurl, callbackFunction) {
     var the_url = TOKEN_URL + "?grant_type=authorization_code";
     the_url += "&client_id=" + localStorage.getItem('clientId');
     the_url += "&client_secret=" + client_secret;
-    the_url += "&redirect_uri=" + BASE_URL;
+    the_url += "&redirect_uri=" + encodeURI(BASE_URL);
     the_url += "&code=" + localStorage.getItem('code');
     console.log('>>>>>>>>>>>>>>>>>> ' + the_url);
     $.ajax({
