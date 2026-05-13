@@ -3,6 +3,7 @@ const AUTH_URL = 'https://github.com/login/oauth/authorize';
 const TOKEN_URL = 'https://github.com/login/oauth/access_token';
 const API_URL = 'https://api.github.com/';
 const BASE_URL = 'https://aleoncini.github.io/oauthorizeme/index.html';
+const APP_URL = "http://localhost:8080/";
 
 async function apiRequest(url, post = false, accessToken = null) {
 
@@ -39,10 +40,16 @@ async function apiRequest(url, post = false, accessToken = null) {
     return await response.json();
 }
 
-async function getToken(params) {
-    const data = await apiRequest(TOKEN_URL, params);
-    localStorage.setItem('accessToken', data);
-    console.log(data);
+async function getToken(code) {
+    const res = await fetch(APP_URL + 'oauth/github', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(code)
+    });
+
+    return await res.json();
 }
 
 function setAlert(msg) {
