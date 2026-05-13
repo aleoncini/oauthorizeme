@@ -3,7 +3,7 @@ const AUTH_URL = 'https://github.com/login/oauth/authorize';
 const TOKEN_URL = 'https://github.com/login/oauth/access_token';
 const API_URL = 'https://api.github.com/';
 const BASE_URL = 'https://aleoncini.github.io/oauthorizeme/index.html';
-const APP_URL = "http://localhost:8080/";
+const APP_URL = "http://localhost:8080";
 
 async function apiRequest(url, post = false, accessToken = null) {
 
@@ -40,16 +40,20 @@ async function apiRequest(url, post = false, accessToken = null) {
     return await response.json();
 }
 
-async function getToken(code) {
-    const res = await fetch(APP_URL + 'oauth/github', {
+async function getToken() {
+    var the_url = APP_URL + '/oauth/github?';
+    the_url += 'id=' + localStorage.getItem('clientId');
+    the_url += '&secret=' + localStorage.getItem('clientSecret');
+    the_url += '&code=' + localStorage.getItem('code');
+    console.log('getting token: ' + the_url);
+    const res = await fetch(the_url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(code)
+        }
     });
-
-    return await res.json();
+    console.log('=============> ' + JSON.stringify(await res));
+    return await res;
 }
 
 function setAlert(msg) {
@@ -69,37 +73,54 @@ const generateHash = (string) => {
   return hash;
 };
 
+async function test() {
+
+    const response = await fetch('http://localhost:8080/oauth/github', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            code: 'test'
+        })
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+}
+
 function queryParamToBool(value) {
   return ((value+'').toLowerCase() === 'true')
 };
 
-function displayAccessToken() {
+function displayAccessToken(code) {
+    $('#loginForm').hide();
+    $('#accessCodeText').html(code);
     $('#accessCode').show(500);
 }
 
-function getAccessToken(client_secret, baseurl, callbackFunction) {
-    var the_url = TOKEN_URL + "?grant_type=authorization_code";
-    the_url += "&client_id=" + localStorage.getItem('clientId');
-    the_url += "&client_secret=" + client_secret;
-    the_url += "&redirect_uri=" + encodeURI("https://aleoncini.github.io/oauthorizeme/repos.html");
-    the_url += "&code=" + localStorage.getItem('code');
-    console.log('>>>>>>>>>>>>>>>>>> ' + the_url);
+function getAccessToken(callbackFunction) {
+    var the_url = APP_URL + '/oauth/github?';
+    the_url += 'id=' + localStorage.getItem('clientId');
+    the_url += '&secret=' + localStorage.getItem('clientSecret');
+    the_url += '&code=' + localStorage.getItem('code');
+    console.log('getting token: ' + the_url);
     $.ajax({
         url: the_url,
         type: 'POST',
-        beforeSend: function(req) {
-            req.setRequestHeader('Access-Control-Allow-Origin', '*');
-            req.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-            req.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+        headers: {
+            'Content-Type': 'application/json'
         },
         complete: function(response, status){
             console.log("Answer from GITHUB: " + response.responseText);
-            callbackFunction(response.responseText);        
+            const obj = JSON.parse(response.responseText);
+            callbackFunction(obj.Access_token);        
         }
     });
 }
 
-function loadRepos(client_secret, callbackFunction) {
+function loadRepos(callbackFunction) {
     $.ajax({
         url: TOKEN_URL,
         type: 'GET',
