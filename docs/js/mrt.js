@@ -4,6 +4,47 @@ const TOKEN_URL = 'https://github.com/login/oauth/access_token';
 const API_URL = 'https://api.github.com/';
 const BASE_URL = 'https://aleoncini.github.io/oauthorizeme/index.html';
 
+async function apiRequest(url, post = false, accessToken = null) {
+
+    const headers = {
+        'Accept': 'application/vnd.github.v3+json, application/json',
+        'User-Agent': 'https://example-app.com/'
+    };
+
+    // Aggiunge il token se presente
+    if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+
+    // Configurazione fetch
+    const options = {
+        method: post ? 'POST' : 'GET',
+        headers: headers
+    };
+
+    // Parametri POST
+    if (post) {
+        options.body = new URLSearchParams(post);
+    }
+
+    // Chiamata API
+    const response = await fetch(url, options);
+
+    // Controllo errori HTTP
+    if (!response.ok) {
+        throw new Error(`Errore HTTP: ${response.status}`);
+    }
+
+    // Converte la risposta JSON
+    return await response.json();
+}
+
+async function getToken(params) {
+    const data = await apiRequest(TOKEN_URL, params);
+    localStorage.setItem('accessToken', data);
+    console.log(data);
+}
+
 function setAlert(msg) {
     $("#formNotComplete").html(msg);
     $("#formNotComplete").fadeIn();

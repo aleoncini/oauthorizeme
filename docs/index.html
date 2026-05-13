@@ -59,6 +59,7 @@
         <p class="text-end">In order to obtain the code insert the CLIENT ID and press login button.</p>
         <div class="input-group mb-3">
             <input id="clientIdInput" type="text" class="form-control" placeholder="client ID" aria-label="client ID" aria-describedby="basic-addon2">
+            <input id="clientSecretInput" type="text" class="form-control" placeholder="client secret" aria-label="client secret" aria-describedby="basic-addon2">
             <div class="input-group-append">
                 <button id="loginButton" class="btn btn-outline-primary" type="button">Login</button>
             </div>
@@ -104,8 +105,8 @@
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
 
-            if(urlParams.has('accessToken')){
-                console.log('!!!!!!=================> ' + urlParams.get('accessToken'));
+            if(urlParams.has('code')){
+                console.log('!!!!!!=================> ' + urlParams.get('code'));
             }
 
             const client_id = localStorage.getItem("clientId");
@@ -120,19 +121,21 @@
             if(code == null){
                 $('#loginForm').show(500);
             } else {
-                var checkState = true;
-                const queryCheckState = urlParams.get('checkState');
-                if(queryCheckState != null && queryCheckState.toLowerCase() == "false"){
-                    checkState = false;
-                } 
-                if(checkState){
-                    // check the challenge
-                    if(urlParams.get('state') != localStorage.getItem('state')){
-                        setAlert('Invalid STATE');
-                        return;
-                    }
+                // we always check the state
+                if(urlParams.get('state') != localStorage.getItem('state')){
+                    setAlert('Invalid STATE');
+                    return;
                 }
                 localStorage.setItem('code', code);
+
+                const params = new URLSearchParams();
+                params.set("grant_type", 'authorization_code');
+                params.set("client_id", $('#clientIdInput').val());
+                params.set("client_secret", $('#clientSecretInput').val());
+                params.set("code", localStorage.getItem('code'));
+                params.set("redirect_uri", "https://aleoncini.github.io/oauthorizeme/index.html");
+                getToken(params.toString());
+
                 $('#authorizationCodeText').html(code);
                 $('#authorizationCode').show(500);
             }
