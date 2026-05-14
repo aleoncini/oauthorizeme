@@ -56,7 +56,7 @@
     <div class="container" id="loginForm" style="display:none">
         <p>To test the OAuth framework, specifically the Authorization Code Grant with PKCE, we will try to access the list of the repos of your GITHUB account.</p>
         <p>To do it this application will redirect you to the authorization page of github and will require an AUTHORIZATION CODE for a specific client (that I have named <i>oauthorizeme</i>).</p>
-        <p>We need to specify two parameters: the <i>Client ID</i> and the <i>Client Secret</i>. The second one is highly confidential and should not be shared.</p>
+        <p>We need to specify two parameters: the <i>Client ID</i> and the <i>Client Secret</i>. The second one is highly confidential and should not be shared nor saved into the browser (like this page does so: !! DO NOT USE THIS EXAMPLE in a real application!! is just for test).</p>
         <p class="text-end">In order to obtain the access code insert the INFO and press login button.</p>
         <div class="input-group mb-3">
             <input id="clientIdInput" type="text" class="form-control" placeholder="client ID" aria-label="client ID" aria-describedby="basic-addon2">
