@@ -94,9 +94,9 @@ function queryParamToBool(value) {
   return ((value+'').toLowerCase() === 'true')
 };
 
-function displayAccessToken(code) {
+function displayAccessToken(token) {
     $('#loginForm').hide();
-    $('#accessCodeText').html(code);
+    $('#accessTokenText').html(token);
     $('#accessCode').show(500);
 }
 
@@ -115,80 +115,49 @@ function getAccessToken(callbackFunction) {
         complete: function(response, status){
             console.log("Answer from GITHUB: " + response.responseText);
             const obj = JSON.parse(response.responseText);
+            localStorage.setItem('token', obj.Access_token);
             callbackFunction(obj.Access_token);        
         }
     });
 }
 
 function loadRepos(callbackFunction) {
+    var the_url = API_URL + 'user/repos';
     $.ajax({
-        url: TOKEN_URL,
+        url: the_url,
         type: 'GET',
         dataType: 'json',
         beforeSend: function(req) {
-            req.setRequestHeader('Accept', 'application/vnd.github.v3+json, application/json');
-            req.setRequestHeader('User-Agent', 'https://example-app.com/');
-            req.setRequestHeader('Authorization', 'Bearer ' + client_secret);
-
-
-            'Accept: application/vnd.github.v3+json, application/json',
-      'User-Agent: https://example-app.com/'
-
-            req.setRequestHeader('Authorization', 'Bearer ' + keycloak.token);
+            req.setRequestHeader('Accept', 'application/vnd.github+json, application/json');
+            req.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
+            req.setRequestHeader('X-GitHub-Api-Version', '2026-03-10');
         },
         complete: function(response, status){
-            var userAlreadyExists = false;
-            if(status=='nocontent'){
-                var associate = {};
-                associate.userid = id;
-            } else {
-                userAlreadyExists = true;
-                var associate = jQuery.parseJSON(response.responseText);
-            }
-            callbackFunction(associate, userAlreadyExists);        
+            const repos = JSON.parse(response.responseText);
+            callbackFunction(repos);        
         }
     });
 };
 
+function displayRepos(repos) {
+    // id, full_name, description, html_url
+    $('#loginForm').hide();
+    $('#accessCode').hide();
+    $("#reposTableBody").empty();
 
-
-
-
-
-
-
-
-function displayAllTrips() {
-    $('#current_report').hide();
-    $("#tripsTableBody").empty();
-
-    // check if an array of trips is locally saved
-    var trips = JSON.parse(localStorage.getItem("mrtTrips") || "[]");
-
-    $.each(trips, function (index, trip) {
-        addTripToTable(trip, index)
+    $.each(repos, function (index, repo) {
+        addRepoToTable(repo);
     });
 
-    $('#current_report').show(500);
-};
+    $('#repos').show(500);
+}
 
-function addTripToTable(trip, ndx) {
-    var tripDate = new Date(trip.date).toLocaleDateString('it-IT', options);
+function addRepoToTable(repo) {
     var rowContent = '<tr>';
-    rowContent += '<td>' + tripDate + '</td>';
-    rowContent += '<td>' + trip.odometerStart + '</td>';
-    rowContent += '<td>' + trip.from + '</td>';
-    rowContent += '<td>' + trip.destination + '</td>';
-    rowContent += '<td><img src="img/';
-    if(trip.twoWays){
-        rowContent += 'check-';
-    }
-    rowContent += 'circle.svg" width="24" height="24"></td>';
-    rowContent += '<td>' + trip.purpose + '</td>';
-    rowContent += '<td>' + trip.odometerEnd + '</td>';
-    rowContent += '<td>' + trip.distance + '</td>';
-    //console.log("=====> " + trip.date + " ===== " + ndx);
-    rowContent += '<td style="cursor: pointer;" class="delete_trip" data-id="' + ndx + '"><img src="img/trash.svg" alt="delete" width="24" height="24"></td>';
+    rowContent += '<td>' + repo.id + '</td>';
+    rowContent += '<td>' + repo.full_name + '</td>';
+    rowContent += '<td>' + repo.description + '</td>';
+    rowContent += '<td><a href="' + repo.html_url + '" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">' + repo.html_url + '</a></td>';
     rowContent += '</tr>';
-    $('#tbl_trips  tbody').append(rowContent);
+    $('#tbl_repos  tbody').append(rowContent);
 };

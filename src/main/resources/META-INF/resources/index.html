@@ -44,7 +44,7 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
         <div class="container">
-            <h1 class="display-3">OAuthorizeMe</h1>
+            <h1 class="display-3"><a href="/index.html" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">OAuthorizeMe</a></h1>
             <p class="lead">A very simple web app to work with OAuth2 framework</p>
             <p id="the_response"></p>
             <br><br>
@@ -57,7 +57,7 @@
         <p>To test the OAuth framework, specifically the Authorization Code Grant with PKCE, we will try to access the list of the repos of your GITHUB account.</p>
         <p>To do it this application will redirect you to the authorization page of github and will require an AUTHORIZATION CODE for a specific client (that I have named <i>oauthorizeme</i>).</p>
         <p>We need to specify two parameters: the <i>Client ID</i> and the <i>Client Secret</i>. The second one is highly confidential and should not be shared.</p>
-        <p class="text-end">In order to obtain the code insert the CLIENT ID and press login button.</p>
+        <p class="text-end">In order to obtain the access code insert the INFO and press login button.</p>
         <div class="input-group mb-3">
             <input id="clientIdInput" type="text" class="form-control" placeholder="client ID" aria-label="client ID" aria-describedby="basic-addon2">
             <input id="clientSecretInput" type="text" class="form-control" placeholder="client secret" aria-label="client secret" aria-describedby="basic-addon2">
@@ -68,12 +68,25 @@
     </div>
 
     <div class="container" id="accessCode" style="display:none">
-        <p>ACCESS CODE:</p>
+        <p>AUTHORIZATION CODE:</p>
         <p style="color: firebrick; font-size: 2em; font-weight: bold; font-family: Lucida Console, Courier New, monospace;" id="accessCodeText"></p>
+        <p>ACCESS TOKEN:</p>
+        <p style="color: firebrick; font-size: 2em; font-weight: bold; font-family: Lucida Console, Courier New, monospace;" id="accessTokenText"></p>
         <br>
         <p>After the login on GITHUB you have received an Authorization Code that the app exchanged with an Access Token.</p>
         <p>This one time Access Token can now be used to access the GITHUB APIs and get a list of your repos. Just click the button.</p>
         <button id="reposButton" type="button" class="btn btn-primary">Repos</button>
+    </div>
+
+    <div class="container" id="repos" style="display:none">
+        <h2>List of public repos</h2>
+        <table class="table table-condensed table-hover" id="tbl_repos">
+            <thead>
+                <tr class="tb_header"><th>Id</th><th>Full name</th><th>Description</th><th>URL</th></tr>
+            </thead>
+            <tbody id="reposTableBody">
+            </tbody>
+        </table>
     </div>
 
 </main>
@@ -116,6 +129,7 @@
                     return;
                 }
                 localStorage.setItem('code', code);
+                $('#accessCodeText').html(code);
 
                 const params = new URLSearchParams();
                 params.set("grant_type", 'authorization_code');
@@ -157,23 +171,7 @@
             });
 
             $('#reposButton').click(function(){
-                if ($('#clientSecretInput').val().length == 0) {
-                    setAlert('Please insert a valid SECRET ID');
-                    return;
-                }
-                $("#authorizationCode").hide(500);
-
-                const params = new URLSearchParams();
-                params.set("grant_type", 'authorization_code');
-                params.set("client_id", localStorage.getItem('clientId'));
-                params.set("client_secret", $('#clientSecretInput').val());
-                params.set("code", localStorage.getItem('code'));
-                params.set("redirect_uri", "https://aleoncini.github.io/oauthorizeme/repos.html");
-
-                console.log("xchange: " + TOKEN_URL + '?' + params.toString());
-                window.open(TOKEN_URL + '?' + params.toString(), "_self");
-
-                //getAccessToken($('#clientSecretInput').val(), BASE_URL, displayAccessToken);
+                loadRepos(displayRepos);
             });
 
         });
